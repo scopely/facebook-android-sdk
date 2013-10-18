@@ -7,6 +7,7 @@ build/
 *.iml
 local.properties
 .arc/
+.gradle
 bin/
 gen/
 out/

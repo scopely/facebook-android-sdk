@@ -1,3 +1,12 @@
+/**
+ * Usage:
+ * Set artifactoryDeployUser and artifactoryDeployPassword in ~/.gradle/gradle.properties
+ *
+ * ./gradlew uploadArchives
+ *
+ * Done!
+ */
+
 buildscript {
     repositories {
         mavenCentral()
@@ -8,10 +17,11 @@ buildscript {
 }
 
 apply plugin: 'android-library'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 17
-    buildToolsVersion "18.1"
+    buildToolsVersion "18.1.1"
 
     sourceSets {
         main {
@@ -41,4 +51,34 @@ repositories {
 
 dependencies {
     compile 'com.android.support:support-v4:13.0.+'
+}
+
+version = '3.5-SNAPSHOT'
+group = 'com.facebook'
+
+uploadArchives {
+    repositories {
+        // the maven plugin features this deployer
+        mavenDeployer {
+            // we deploy to the release repository in this case
+            repository(url: "http://scopelybin.artifactoryonline.com/scopelybin/libs-snapshots-local/") {
+                authentication(userName: artifactoryDeployUser, password: artifactoryDeployPassword)
+            }
+            pom.project {
+                artifactId 'facebook-android-sdk'
+                name 'Facebook Android SDK'
+                packaging 'aar'
+            }
+        }
+    }
+}
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
 }
