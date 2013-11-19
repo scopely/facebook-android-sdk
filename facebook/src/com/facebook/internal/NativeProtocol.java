@@ -306,11 +306,14 @@ public final class NativeProtocol {
     }
 
     public static boolean isErrorResult(Intent resultIntent) {
+        if(resultIntent == null){
+            return true;
+        }
         return resultIntent.hasExtra(STATUS_ERROR_TYPE);
     }
 
     public static Exception getErrorFromResult(Intent resultIntent) {
-        if (!isErrorResult(resultIntent)) {
+        if (resultIntent == null || !isErrorResult(resultIntent)) {
             return null;
         }
 
